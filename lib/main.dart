@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'controller/form_controller.dart';
 import 'model/form.dart';
 
@@ -8,11 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Google Sheet Demo',
+      title: 'e-Imarat',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Google Sheet Demo'),
+      home: MyHomePage(title: 'e-Imarat'),
     );
   }
 }
@@ -27,6 +30,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String dateTimeNow =  DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
+
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
@@ -57,21 +62,21 @@ class _MyHomePageState extends State<MyHomePage> {
           quantityController.text,
           bundlePieceController.text,
           rateController.text,
-          transHamaliController.text
-          );
+          transHamaliController.text);
 
       FormController formController = FormController((String response) {
         print("Response: $response");
         if (response == FormController.STATUS_SUCCESS) {
           // Feedback is saved succesfully in Google Sheets.
-          _showSnackbar("Feedback Submitted");
+          _showSnackbar(
+              "Submitted SUCCESSfully!", Colors.green, Duration(seconds: 30));
         } else {
           // Error Occurred while saving data in Google Sheets.
-          _showSnackbar("Error Occurred!");
+          _showSnackbar("Error Occurred!", Colors.red, Duration(seconds: 3));
         }
       });
 
-      _showSnackbar("Submitting Feedback");
+      _showSnackbar("Submitting Feedback", Colors.blue, Duration(seconds: 2));
 
       // Submit 'feedbackForm' and save it in Google Sheets.
       formController.submitForm(feedbackForm);
@@ -79,8 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // Method to show snackbar with 'message'.
-  _showSnackbar(String message) {
-    final snackBar = SnackBar(content: Text(message));
+  _showSnackbar(String message, Color color, Duration time) {
+    final snackBar = SnackBar(
+      content: Text(message, style: TextStyle(fontSize: 20)),
+      backgroundColor: color,
+      duration: time,
+    );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -96,6 +105,24 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(
+              child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Sales Entry',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                      Expanded(child: Divider(),),
+                      Text(
+                        '$dateTimeNow',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                    ],
+                  )),
+            ),
             Form(
                 key: _formKey,
                 child: Padding(
@@ -107,88 +134,138 @@ class _MyHomePageState extends State<MyHomePage> {
                         controller: dateController,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Enter Valid Name';
+                            return 'Enter Valid Date';
                           }
                           return null;
                         },
-                        decoration: InputDecoration(labelText: 'Name'),
+                        keyboardType: TextInputType.datetime,
+                        decoration: InputDecoration(
+                          labelText: 'Sales Date (MM/DD/YYYY)',
+                          border: OutlineInputBorder(),
+                        ),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                       TextFormField(
                         controller: clientNameController,
-                        validator: (value) {
-                          if (!value.contains("@")) {
-                            return 'Enter Valid Email';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(labelText: 'Email'),
+                        // validator: (value) {
+                        //   if (!value.contains("@")) {
+                        //     return 'Enter Valid Email';
+                        //   }
+                        //   return null;
+                        // },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            labelText: 'Client Name',
+                            border: OutlineInputBorder(),
+                            hintText: 'Select Client Name'),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                       TextFormField(
                         controller: productNameController,
-                        validator: (value) {
-                          if (value.trim().length != 10) {
-                            return 'Enter 10 Digit Mobile Number';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
+                        // validator: (value) {
+                        //   if (value.trim().length != 10) {
+                        //     return 'Enter 10 Digit Mobile Number';
+                        //   }
+                        //   return null;
+                        // },
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          labelText: 'Mobile Number',
-                        ),
+                            labelText: 'Product Name',
+                            border: OutlineInputBorder()),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                       TextFormField(
                         controller: quantityController,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Enter Valid Feedback';
+                            return 'Enter Valid Quantity';
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(labelText: 'Feedback'),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            labelText: 'Quantity',
+                            border: OutlineInputBorder()),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                       TextFormField(
                         controller: bundlePieceController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Enter Valid Feedback';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(labelText: 'Feedback'),
+                        // validator: (value) {
+                        //   if (value.isEmpty) {
+                        //     return 'Enter Valid Feedback';
+                        //   }
+                        //   return null;
+                        // },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            labelText: 'Bundle / Piece',
+                            border: OutlineInputBorder()),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                       TextFormField(
                         controller: rateController,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Enter Valid Feedback';
+                            return 'Enter Valid Rate';
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(labelText: 'Feedback'),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Rate',
+                          border: OutlineInputBorder(),
+                        ),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                       TextFormField(
                         controller: transHamaliController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Enter Valid Feedback';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(labelText: 'Feedback'),
+                        // validator: (value) {
+                        //   if (value.isEmpty) {
+                        //     return 'Enter Valid Feedback';
+                        //   }
+                        //   return null;
+                        // },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Transportation Charge',
+                          border: OutlineInputBorder(),
+                        ),
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
                       ),
                     ],
                   ),
                 )),
             RaisedButton(
               color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(15.0)),
               textColor: Colors.white,
               onPressed: _submitForm,
-              child: Text('Submit Feedback'),
+              child: Text(
+                'Submit Sales Entry',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),

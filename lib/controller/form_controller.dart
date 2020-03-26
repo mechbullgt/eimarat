@@ -25,7 +25,7 @@ class FormController {
         URL + feedbackForm.toParams()
       ).then((response){
         print("Response:"+response.body);
-        callback(convert.jsonDecode(response.body));
+        callback(convert.jsonDecode(response.body)['status']);
       });    
     } catch (e) {
       print(e);
