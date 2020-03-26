@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'controller/form_controller.dart';
@@ -30,7 +31,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String dateTimeNow =  DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
+  String dateTimeNow = DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
+
+  final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
+  final timeFormat = DateFormat("h:mm a");
+  DateTime date;
+  TimeOfDay time;
+
+  String _value = '';
+
+  Future _selectDate() async {
+    DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(2020),
+        lastDate: new DateTime(2022));
+    if (picked != null) setState(() => _value = picked.toString());
+  }
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -115,7 +132,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         'Sales Entry',
                         style: TextStyle(fontSize: 22),
                       ),
-                      Expanded(child: Divider(),),
+                      Expanded(
+                        child: Divider(),
+                      ),
                       Text(
                         '$dateTimeNow',
                         style: TextStyle(fontSize: 22),
@@ -130,7 +149,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      new Text(_value),
+                      new RaisedButton(
+                        onPressed: _selectDate,
+                        child: new Text('Click me'),
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      // DateTimePickerFormField(
+                      //   format: dateFormat,
+                      //   decoration: InputDecoration(labelText: 'Date'),
+                      //   onChanged: (dt) => setState(() => date = dt),
+                      // ),
+                      // SizedBox(height: 16.0),
+                      // Text('date.toString(): $date',
+                      //     style: TextStyle(fontSize: 18.0)),
                       TextFormField(
+                        // controller: dateController,
                         controller: dateController,
                         validator: (value) {
                           if (value.isEmpty) {
