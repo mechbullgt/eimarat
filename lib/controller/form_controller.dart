@@ -24,7 +24,8 @@ class FormController {
       await http.get(
         URL + feedbackForm.toParams()
       ).then((response){
-        callback(convert.jsonDecode(response.body)['status']);
+        print("Response:"+response.body);
+        callback(convert.jsonDecode(response.body));
       });    
     } catch (e) {
       print(e);
