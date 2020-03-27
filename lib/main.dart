@@ -33,21 +33,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String dateTimeNow = DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
 
-  final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
-  final timeFormat = DateFormat("h:mm a");
-  DateTime date;
-  TimeOfDay time;
+//  DateTime dateTimeNow2 = DateTime.parse(DateFormat("dd-MM-yyyy").format(DateTime.now()));
 
-  String _value = '';
-
-  Future _selectDate() async {
-    DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: new DateTime.now(),
-        firstDate: new DateTime(2020),
-        lastDate: new DateTime(2022));
-    if (picked != null) setState(() => _value = picked.toString());
-  }
+  // For date picker
+  DateTime date1;
+  DateTime date2;
+  DateTime date3;
 
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -132,9 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         'Sales Entry',
                         style: TextStyle(fontSize: 22),
                       ),
-                      Expanded(
-                        child: Divider(),
-                      ),
+                      Expanded(child: Container(
+                      )),
                       Text(
                         '$dateTimeNow',
                         style: TextStyle(fontSize: 22),
@@ -149,41 +139,42 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      new Text(_value),
-                      new RaisedButton(
-                        onPressed: _selectDate,
-                        child: new Text('Click me'),
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      // DateTimePickerFormField(
-                      //   format: dateFormat,
-                      //   decoration: InputDecoration(labelText: 'Date'),
-                      //   onChanged: (dt) => setState(() => date = dt),
-                      // ),
-                      // SizedBox(height: 16.0),
-                      // Text('date.toString(): $date',
-                      //     style: TextStyle(fontSize: 18.0)),
-                      TextFormField(
-                        // controller: dateController,
+                      DateTimePickerFormField(
                         controller: dateController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Enter Valid Date';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.datetime,
+                        inputType: InputType.date,
+                        format: DateFormat("MM/dd/yyyy"),
+                        initialDate: DateTime.now(),
+                        editable: false,
                         decoration: InputDecoration(
                           labelText: 'Sales Date (MM/DD/YYYY)',
+                          hasFloatingPlaceholder: false,
                           border: OutlineInputBorder(),
                         ),
-                        autofocus: false,
+                        onChanged: (dt) {
+                          setState(() => date2 = dt);
+                          print('Selected date: $date2');
+                        },
                       ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
+                      SizedBox(height: 8.0),
+                      // TextFormField(
+                      //   // controller: dateController,
+                      //   controller: dateController,
+                      //   validator: (value) {
+                      //     if (value.isEmpty) {
+                      //       return 'Enter Valid Date';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   keyboardType: TextInputType.datetime,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Sales Date (MM/DD/YYYY)',
+                      //     border: OutlineInputBorder(),
+                      //   ),
+                      //   autofocus: false,
+                      // ),
+                      // SizedBox(
+                      //   height: 8.0,
+                      // ),
                       TextFormField(
                         controller: clientNameController,
                         // validator: (value) {
