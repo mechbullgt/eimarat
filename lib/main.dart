@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'controller/form_controller.dart';
 import 'model/form.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -29,6 +32,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _mySelection;
+
+  // final String url = "http://webmyls.com/php/getdata.php";
+  final String url = "https://script.google.com/macros/s/AKfycbyIaIR_Ix2KsuX6eYrn3EtywbHwmvn1IAYI3BkhoGK5lTTflrkB/exec";
+  
+  List data = List(); //edited line
+
+  Future<String> getSWData() async {
+    var res = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+
+    print(res.body);
+
+    Map<String, dynamic> resBody = json.decode(res.body);
+    setState(() {
+      data = resBody['clientNamesAPI'];
+    });
+    print(data);
+    return "Sucess";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getSWData();
+  }
+
+  List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
+  String _color = '';
+
   String dateTimeNow = DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
 
 //  DateTime dateTimeNow2 = DateTime.parse(DateFormat("dd-MM-yyyy").format(DateTime.now()));
@@ -98,9 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
-
-  List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
-  String _color = '';
 
   @override
   Widget build(BuildContext context) {
@@ -197,38 +227,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       new FormField(
                         builder: (FormFieldState state) {
                           return InputDecorator(
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.account_circle),
-                              labelText: 'Client Name',
-                              border: OutlineInputBorder(),
-                            ),
-                            isEmpty: _color == '',
-                            child: new DropdownButtonHideUnderline(
-                              child: new DropdownButton(
-                                value: _color,
-                                isDense: true,
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    clientNameController.text = newValue;
-                                    _color = newValue;
-                                    state.didChange(newValue);
-                                  });
-                                },
-                                items: _colors.map((String value) {
-                                  return new DropdownMenuItem(
-                                    value: value,
-                                    child: new Text(value),
-                                  );
-                                }).toList(),
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.account_circle),
+                                labelText: 'Client Name',
+                                border: OutlineInputBorder(),
                               ),
-                            ),
-                          );
+                              isEmpty: _color == '',
+                              child: new DropdownButtonHideUnderline(
+                                child: new DropdownButton(
+                                  items: data.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item),
+                                      value: item.toString(),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      _mySelection = newVal;
+                                    });
+                                  },
+                                  value: _mySelection,
+                                ),
+                              ));
                         },
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
-
                       TextFormField(
                         controller: productNameController,
                         // validator: (value) {
