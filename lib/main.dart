@@ -35,8 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String _mySelection;
 
   // final String url = "http://webmyls.com/php/getdata.php";
-  final String url = "https://script.google.com/macros/s/AKfycbyIaIR_Ix2KsuX6eYrn3EtywbHwmvn1IAYI3BkhoGK5lTTflrkB/exec";
-  
+  final String url =
+      "https://script.google.com/macros/s/AKfycbyIaIR_Ix2KsuX6eYrn3EtywbHwmvn1IAYI3BkhoGK5lTTflrkB/exec";
+
   List data = List(); //edited line
 
   Future<String> getSWData() async {
@@ -223,17 +224,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           return InputDecorator(
                               decoration: InputDecoration(
                                 icon: const Icon(Icons.account_circle),
-                                hintText: 'Client Name',
+                                labelText: 'Client Name',
                                 border: OutlineInputBorder(),
                               ),
                               child: new DropdownButtonHideUnderline(
                                 child: new DropdownButton(
+                                  hint: new Text("Select Client Name"),
                                   items: data.map((item) {
                                     return new DropdownMenuItem(
                                       child: new Text(item),
                                       value: item.toString(),
                                     );
                                   }).toList(),
+                                  autofocus: false,
                                   onChanged: (newVal) {
                                     setState(() {
                                       clientNameController.text = newVal;
@@ -241,7 +244,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   },
                                   value: _mySelection,
-                                  
                                 ),
                               ));
                         },
