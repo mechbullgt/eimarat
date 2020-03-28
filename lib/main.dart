@@ -43,13 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
     var res = await http
         .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
 
-    print(res.body);
-
     Map<String, dynamic> resBody = json.decode(res.body);
     setState(() {
       data = resBody['clientNamesAPI'];
     });
-    print(data);
     return "Sucess";
   }
 
@@ -58,9 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     this.getSWData();
   }
-
-  List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
-  String _color = '';
 
   String dateTimeNow = DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
 
@@ -229,10 +223,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           return InputDecorator(
                               decoration: InputDecoration(
                                 icon: const Icon(Icons.account_circle),
-                                labelText: 'Client Name',
+                                hintText: 'Client Name',
                                 border: OutlineInputBorder(),
                               ),
-                              isEmpty: _color == '',
                               child: new DropdownButtonHideUnderline(
                                 child: new DropdownButton(
                                   items: data.map((item) {
@@ -243,10 +236,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }).toList(),
                                   onChanged: (newVal) {
                                     setState(() {
+                                      clientNameController.text = newVal;
                                       _mySelection = newVal;
                                     });
                                   },
                                   value: _mySelection,
+                                  
                                 ),
                               ));
                         },
