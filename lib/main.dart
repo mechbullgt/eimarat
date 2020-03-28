@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -101,6 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
+  String _color = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,8 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         'Sales Entry',
                         style: TextStyle(fontSize: 22),
                       ),
-                      Expanded(child: Container(
-                      )),
+                      Expanded(child: Container()),
                       Text(
                         '$dateTimeNow',
                         style: TextStyle(fontSize: 22),
@@ -148,6 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         decoration: InputDecoration(
                           labelText: 'Sales Date (MM/DD/YYYY)',
                           hasFloatingPlaceholder: false,
+                          icon: const Icon(Icons.date_range),
                           border: OutlineInputBorder(),
                         ),
                         onChanged: (dt) {
@@ -175,24 +176,59 @@ class _MyHomePageState extends State<MyHomePage> {
                       // SizedBox(
                       //   height: 8.0,
                       // ),
-                      TextFormField(
-                        controller: clientNameController,
-                        // validator: (value) {
-                        //   if (!value.contains("@")) {
-                        //     return 'Enter Valid Email';
-                        //   }
-                        //   return null;
-                        // },
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            labelText: 'Client Name',
-                            border: OutlineInputBorder(),
-                            hintText: 'Select Client Name'),
-                        autofocus: false,
+                      // TextFormField(
+                      //   controller: clientNameController,
+                      //   // validator: (value) {
+                      //   //   if (!value.contains("@")) {
+                      //   //     return 'Enter Valid Email';
+                      //   //   }
+                      //   //   return null;
+                      //   // },
+                      //   keyboardType: TextInputType.text,
+                      //   decoration: InputDecoration(
+                      //       labelText: 'Client Name',
+                      //       border: OutlineInputBorder(),
+                      //       hintText: 'Select Client Name'),
+                      //   autofocus: false,
+                      // ),
+                      // SizedBox(
+                      //   height: 8.0,
+                      // ),
+                      new FormField(
+                        builder: (FormFieldState state) {
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.account_circle),
+                              labelText: 'Client Name',
+                              border: OutlineInputBorder(),
+                            ),
+                            isEmpty: _color == '',
+                            child: new DropdownButtonHideUnderline(
+                              child: new DropdownButton(
+                                value: _color,
+                                isDense: true,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    clientNameController.text = newValue;
+                                    _color = newValue;
+                                    state.didChange(newValue);
+                                  });
+                                },
+                                items: _colors.map((String value) {
+                                  return new DropdownMenuItem(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
+
                       TextFormField(
                         controller: productNameController,
                         // validator: (value) {
@@ -203,6 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // },
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
+                            icon: const Icon(Icons.local_grocery_store),
                             labelText: 'Product Name',
                             border: OutlineInputBorder()),
                         autofocus: false,
@@ -220,6 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                            icon: const Icon(Icons.code),
                             labelText: 'Quantity',
                             border: OutlineInputBorder()),
                         autofocus: false,
@@ -237,6 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // },
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
+                            icon: const Icon(Icons.plus_one),
                             labelText: 'Bundle / Piece',
                             border: OutlineInputBorder()),
                         autofocus: false,
@@ -254,6 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          icon: const Icon(Icons.attach_money),
                           labelText: 'Rate',
                           border: OutlineInputBorder(),
                         ),
@@ -272,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // },
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          icon: const Icon(Icons.directions_car),
                           labelText: 'Transportation Charge',
                           border: OutlineInputBorder(),
                         ),
