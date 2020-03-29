@@ -32,30 +32,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _mySelection;
+  String selectedClient;
+  String selectedProduct;
 
-  // final String url = "http://webmyls.com/php/getdata.php";
-  final String url =
+  final String clientListURL =
       "https://script.google.com/macros/s/AKfycbyIaIR_Ix2KsuX6eYrn3EtywbHwmvn1IAYI3BkhoGK5lTTflrkB/exec";
+  final String productsListURL =
+      "https://script.google.com/macros/s/AKfycbybYyrjOjw0tPGVcSbqMjKgvoXMHoiyYIeb3YQDp_KK1b4sfFw/exec";
 
-  List data = List(); //edited line
+  List dataClientsList = List();
+  List dataProductsList = List();
 
-  Future<String> getSWData() async {
-    var res = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+  Future<String> getClientsList() async {
+    var res = await http.get(Uri.encodeFull(clientListURL),
+        headers: {"Accept": "application/json"});
 
     Map<String, dynamic> resBody = json.decode(res.body);
     setState(() {
-      data = resBody['clientNamesAPI'];
+      dataClientsList = resBody['clientNamesAPI'];
     });
-    return "Sucess";
+    return "Success";
+  }
+
+  Future<String> getProductsList() async {
+    var res = await http.get(Uri.encodeFull(productsListURL),
+        headers: {"Accept": "application/json"});
+
+    Map<String, dynamic> resBody = json.decode(res.body);
+    setState(() {
+      dataProductsList = resBody['productsListAPI'];
+    });
+    return "Success";
   }
 
   @override
   void initState() {
     super.initState();
-    this.getSWData();
+    this.getClientsList();
+    this.getProductsList();
   }
+
+  final FocusNode _quantityFocus = FocusNode();
+  final FocusNode _bundlePieceFocus = FocusNode();
+  final FocusNode _rateFocus = FocusNode();
+  final FocusNode _transFocus = FocusNode();
+
 
   String dateTimeNow = DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
 
@@ -182,43 +203,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                       SizedBox(height: 8.0),
-                      // TextFormField(
-                      //   // controller: dateController,
-                      //   controller: dateController,
-                      //   validator: (value) {
-                      //     if (value.isEmpty) {
-                      //       return 'Enter Valid Date';
-                      //     }
-                      //     return null;
-                      //   },
-                      //   keyboardType: TextInputType.datetime,
-                      //   decoration: InputDecoration(
-                      //     labelText: 'Sales Date (MM/DD/YYYY)',
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      //   autofocus: false,
-                      // ),
-                      // SizedBox(
-                      //   height: 8.0,
-                      // ),
-                      // TextFormField(
-                      //   controller: clientNameController,
-                      //   // validator: (value) {
-                      //   //   if (!value.contains("@")) {
-                      //   //     return 'Enter Valid Email';
-                      //   //   }
-                      //   //   return null;
-                      //   // },
-                      //   keyboardType: TextInputType.text,
-                      //   decoration: InputDecoration(
-                      //       labelText: 'Client Name',
-                      //       border: OutlineInputBorder(),
-                      //       hintText: 'Select Client Name'),
-                      //   autofocus: false,
-                      // ),
-                      // SizedBox(
-                      //   height: 8.0,
-                      // ),
                       new FormField(
                         builder: (FormFieldState state) {
                           return InputDecorator(
@@ -230,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: new DropdownButtonHideUnderline(
                                 child: new DropdownButton(
                                   hint: new Text("Select Client Name"),
-                                  items: data.map((item) {
+                                  items: dataClientsList.map((item) {
                                     return new DropdownMenuItem(
                                       child: new Text(item),
                                       value: item.toString(),
@@ -240,10 +224,42 @@ class _MyHomePageState extends State<MyHomePage> {
                                   onChanged: (newVal) {
                                     setState(() {
                                       clientNameController.text = newVal;
-                                      _mySelection = newVal;
+                                      selectedClient = newVal;
                                     });
                                   },
-                                  value: _mySelection,
+                                  value: selectedClient,
+                                ),
+                              ));
+                        },
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      new FormField(
+                        builder: (FormFieldState state) {
+                          return InputDecorator(
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.shopping_cart),
+                                labelText: 'Product Name',
+                                border: OutlineInputBorder(),
+                              ),
+                              child: new DropdownButtonHideUnderline(
+                                child: new DropdownButton(
+                                  hint: new Text("Select Product"),
+                                  items: dataProductsList.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item),
+                                      value: item.toString(),
+                                    );
+                                  }).toList(),
+                                  autofocus: false,
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      productNameController.text = newVal;
+                                      selectedProduct = newVal;
+                                    });
+                                  },
+                                  value: selectedProduct,
                                 ),
                               ));
                         },
@@ -252,25 +268,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 8.0,
                       ),
                       TextFormField(
-                        controller: productNameController,
-                        // validator: (value) {
-                        //   if (value.trim().length != 10) {
-                        //     return 'Enter 10 Digit Mobile Number';
-                        //   }
-                        //   return null;
-                        // },
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            icon: const Icon(Icons.local_grocery_store),
-                            labelText: 'Product Name',
-                            border: OutlineInputBorder()),
-                        autofocus: false,
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      TextFormField(
                         controller: quantityController,
+                        focusNode: _quantityFocus,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Enter Valid Quantity';
@@ -283,12 +282,17 @@ class _MyHomePageState extends State<MyHomePage> {
                             labelText: 'Quantity',
                             border: OutlineInputBorder()),
                         autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term){
+                          _fieldFocusChange(context, _quantityFocus, _bundlePieceFocus);
+                        },
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
                       TextFormField(
                         controller: bundlePieceController,
+                        focusNode: _bundlePieceFocus,
                         // validator: (value) {
                         //   if (value.isEmpty) {
                         //     return 'Enter Valid Feedback';
@@ -301,12 +305,17 @@ class _MyHomePageState extends State<MyHomePage> {
                             labelText: 'Bundle / Piece',
                             border: OutlineInputBorder()),
                         autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term){
+                          _fieldFocusChange(context, _bundlePieceFocus, _rateFocus);
+                        },
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
                       TextFormField(
                         controller: rateController,
+                        focusNode: _rateFocus,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Enter Valid Rate';
@@ -320,12 +329,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           border: OutlineInputBorder(),
                         ),
                         autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term){
+                          _fieldFocusChange(context, _rateFocus, _transFocus);
+                        },
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
                       TextFormField(
                         controller: transHamaliController,
+                        focusNode: _transFocus,
                         // validator: (value) {
                         //   if (value.isEmpty) {
                         //     return 'Enter Valid Feedback';
@@ -339,6 +353,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           border: OutlineInputBorder(),
                         ),
                         autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term){
+                          _transFocus.unfocus();
+                        },
                       ),
                       SizedBox(
                         height: 8.0,
@@ -346,20 +364,50 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 )),
-            RaisedButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(15.0)),
-              textColor: Colors.white,
-              onPressed: _submitForm,
-              child: Text(
-                'Submit Sales Entry',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                RaisedButton(
+                  color: Colors.red.shade400,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
+                  textColor: Colors.white,
+                  onPressed: () {
+                    _formKey.currentState.reset();
+                    dateController.clear();
+                    selectedClient=null;
+                    selectedProduct=null;
+                    quantityController.clear();
+                    bundlePieceController.clear();
+                    rateController.clear();
+                    transHamaliController.clear();
+                  },
+                  child: Text(
+                    'Clear Previous Data',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                RaisedButton(
+                  color: Colors.green.shade400,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
+                  textColor: Colors.white,
+                  onPressed: _submitForm,
+                  child: Text(
+                    'Submit Sales Entry',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
     );
   }
+}
+
+_fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);  
 }
