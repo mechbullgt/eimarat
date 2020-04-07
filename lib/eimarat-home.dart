@@ -3,11 +3,12 @@ import 'package:eimarat/screens/stock/stock-update-home.dart';
 import 'package:flutter/material.dart';
 
 class EImaratHome extends StatelessWidget {
+  final String titleText="e-Imarat";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
-        length: 3,
+        length: 4,
         child: new Scaffold(
           appBar: AppBar(
             title: Column(
@@ -15,9 +16,9 @@ class EImaratHome extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "इमारत",
+                    titleText,
                     style: TextStyle(
-                      fontSize: 60,
+                      fontSize: 30,
                       fontFamily: 'Raleway',
                       fontWeight: FontWeight.w400,
                     ),
@@ -29,12 +30,24 @@ class EImaratHome extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  colors: <Color>[Color(0xff2c3e50), Color(0xff3498db)],
+                  colors: <Color>[Color(0xff9706f0), Color(0xfffac0d8)],
                 ),
               ),
             ),
             bottom: TabBar(
+              isScrollable: true,
               tabs: [
+                Tab(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "इ",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ]),
+                ),
                 Tab(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +83,12 @@ class EImaratHome extends StatelessWidget {
             ),
           ),
           body: TabBarView(
-            children: [SalesEntryHome(), StockUpdateHome(), SalesEntryHome()],
+            children: [
+              SalesEntryHome(),
+              SalesEntryHome(),
+              StockUpdateHome(),
+              SalesEntryHome()
+            ],
           ),
         ));
   }
