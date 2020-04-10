@@ -1,3 +1,4 @@
+import 'package:eimarat/screens/funds/expenses-entry-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
 import 'package:eimarat/screens/stock/stock-update-home.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class EImaratHome extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                       Text(
-                        "Balance Sheet",
+                        "Expenses Entry",
                         style: TextStyle(fontSize: 18),
                       ),
                     ]))
@@ -87,7 +88,7 @@ class EImaratHome extends StatelessWidget {
               SalesEntryHome(),
               SalesEntryHome(),
               StockUpdateHome(),
-              SalesEntryHome()
+              ExpensesEntryHome()
             ],
           ),
         ));

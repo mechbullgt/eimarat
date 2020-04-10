@@ -1,21 +1,20 @@
 import 'dart:convert';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:eimarat/controller/form_controller.dart';
-import 'package:eimarat/model/form.dart';
+import 'package:eimarat/controller/sales-form_controller.dart';
+import 'package:eimarat/model/sales-form.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-
 
 class SalesEntryHome extends StatefulWidget {
   static const String routeName = "/shome";
 
   @override
   _SalesEntryHomeState createState() => new _SalesEntryHomeState();
-  }
-  
-  class _SalesEntryHomeState extends State<SalesEntryHome>{
-   String selectedClient;
+}
+
+class _SalesEntryHomeState extends State<SalesEntryHome> {
+  String selectedClient;
   String selectedProduct;
 
   final String clientListURL =
@@ -59,7 +58,6 @@ class SalesEntryHome extends StatefulWidget {
   final FocusNode _bundlePieceFocus = FocusNode();
   final FocusNode _rateFocus = FocusNode();
   final FocusNode _transFocus = FocusNode();
-
 
   String dateTimeNow = DateFormat("EEE, MMM d, ''yy").format(DateTime.now());
 
@@ -139,7 +137,7 @@ class SalesEntryHome extends StatefulWidget {
       // appBar: AppBar(
       //   title: Text(widget.title),
       // ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -149,22 +147,40 @@ class SalesEntryHome extends StatefulWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        'Sales Entry',
-                        style: TextStyle(fontSize: 22),
+                      OutlineButton(
+                        child: Text(
+                          'Sales Entry',
+                          style: TextStyle(fontSize: 22),
+                        ),
+                        onPressed: () {},
+                        shape: StadiumBorder(),
+                        borderSide: BorderSide(
+                            color: Colors.blue,
+                            style: BorderStyle.solid,
+                            width: 1),
+                        textColor: Colors.black,
                       ),
                       Expanded(child: Container()),
-                      Text(
-                        '$dateTimeNow',
-                        style: TextStyle(fontSize: 22),
-                      ),
+                      OutlineButton(
+                        shape: StadiumBorder(),
+                        textColor: Colors.black,
+                        child: Text(
+                          '$dateTimeNow',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        borderSide: BorderSide(
+                            color: Colors.blue,
+                            style: BorderStyle.solid,
+                            width: 1),
+                        onPressed: () {},
+                      )
                     ],
                   )),
             ),
             Form(
                 key: _formKey,
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.fromLTRB(16, 5, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -266,8 +282,9 @@ class SalesEntryHome extends StatefulWidget {
                             border: OutlineInputBorder()),
                         autofocus: false,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term){
-                          _fieldFocusChange(context, _quantityFocus, _bundlePieceFocus);
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(
+                              context, _quantityFocus, _bundlePieceFocus);
                         },
                       ),
                       SizedBox(
@@ -289,8 +306,9 @@ class SalesEntryHome extends StatefulWidget {
                             border: OutlineInputBorder()),
                         autofocus: false,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term){
-                          _fieldFocusChange(context, _bundlePieceFocus, _rateFocus);
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(
+                              context, _bundlePieceFocus, _rateFocus);
                         },
                       ),
                       SizedBox(
@@ -313,7 +331,7 @@ class SalesEntryHome extends StatefulWidget {
                         ),
                         autofocus: false,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term){
+                        onFieldSubmitted: (term) {
                           _fieldFocusChange(context, _rateFocus, _transFocus);
                         },
                       ),
@@ -337,7 +355,7 @@ class SalesEntryHome extends StatefulWidget {
                         ),
                         autofocus: false,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term){
+                        onFieldSubmitted: (term) {
                           _transFocus.unfocus();
                         },
                       ),
@@ -358,8 +376,8 @@ class SalesEntryHome extends StatefulWidget {
                   onPressed: () {
                     _formKey.currentState.reset();
                     dateController.clear();
-                    selectedClient=null;
-                    selectedProduct=null;
+                    selectedClient = null;
+                    selectedProduct = null;
                     quantityController.clear();
                     bundlePieceController.clear();
                     rateController.clear();
@@ -390,7 +408,8 @@ class SalesEntryHome extends StatefulWidget {
   }
 }
 
-_fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
-    currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);  
+_fieldFocusChange(
+    BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  currentFocus.unfocus();
+  FocusScope.of(context).requestFocus(nextFocus);
 }

@@ -1,6 +1,6 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import '../model/form.dart';
+import 'package:eimarat/model/sales-form.dart';
 
 /// FormController is a class which does work of saving FeedbackForm in Google Sheets using 
 /// HTTP GET request on Google App Script Web URL and parses response and sends result callback.
