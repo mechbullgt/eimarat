@@ -21,7 +21,7 @@ class _ExpensesEntryHomeState extends State<ExpensesEntryHome> {
   //     "https://script.google.com/macros/s/AKfycbybYyrjOjw0tPGVcSbqMjKgvoXMHoiyYIeb3YQDp_KK1b4sfFw/exec";
 
   // List dataClientsList = List();
-  List dataPayModes = ['Cash', 'Bank ChQ', 'Transfer'];
+  List dataPayModes = ['Cash', 'Bank'];
 
   // Future<String> getClientsList() async {
   //   var res = await http.get(Uri.encodeFull(clientListURL),

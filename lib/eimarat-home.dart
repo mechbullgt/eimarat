@@ -1,3 +1,4 @@
+import 'package:eimarat/screens/funds/all-funds.dart';
 import 'package:eimarat/screens/funds/expenses-entry-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
 import 'package:eimarat/screens/stock/stock-update-home.dart';
@@ -44,7 +45,7 @@ class EImaratHome extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "इ",
+                          "Funds",
                           style: TextStyle(fontSize: 18),
                         ),
                       ]),
@@ -85,7 +86,7 @@ class EImaratHome extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              SalesEntryHome(),
+              FundsHome(),
               SalesEntryHome(),
               StockUpdateHome(),
               ExpensesEntryHome()

@@ -1,4 +1,5 @@
 import 'package:eimarat/eimarat-home.dart';
+import 'package:eimarat/screens/funds/all-funds.dart';
 import 'package:eimarat/screens/funds/expenses-entry-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
 import 'package:eimarat/screens/stock/stock-update-home.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: EImaratHome(),
           routes: <String, WidgetBuilder>{
+            FundsHome.routeName: (BuildContext context) => FundsHome(),
             SalesEntryHome.routeName: (BuildContext context) =>
                 SalesEntryHome(),
             StockUpdateHome.routeName: (BuildContext context) =>
