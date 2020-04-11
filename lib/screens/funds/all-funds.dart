@@ -59,36 +59,56 @@ class _FundsHomeState extends State<FundsHome> {
             child: new Center(
                 child: _progressController
                     ? const CircularProgressIndicator()
-                    : new ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: fundsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var key = fundsList.keys.toList().elementAt(index);
-                          return ListTile(
-                              leading: ExcludeSemantics(
-                                  child: CircleAvatar(
-                                      child: new Text(
-                                        '${key[0]}',
-                                      ),
-                                      backgroundColor: Colors.primaries[
-                                          randomVariable.nextInt(
-                                              Colors.primaries.length)])),
-                              title: Text(
-                                '$key',
-                                style: TextStyle(fontSize: 22),
+                    : new Container(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        height: 300,
+                        width: double.maxFinite,
+                        child: Card(
+                            elevation: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                      width: 2.0, color: Colors.green),
+                                ),
+                                color: Colors.white,
                               ),
-                              subtitle: new Text(
-                                getFundsInCurrency(key),
-                                style: TextStyle(fontSize: 22),
-                              ));
-                        }))));
+                              child: Padding(
+                                padding: EdgeInsets.all(7),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, top: 5),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            fundsList['Total'].toString(),
+                                            style: TextStyle(fontSize: 22),
+                                          ),
+                                          Text(
+                                            fundsList['Cash'].toString(),
+                                            style: TextStyle(fontSize: 22),
+                                          ),
+                                                                                    Text(
+                                            fundsList['Bank'].toString(),
+                                            style: TextStyle(fontSize: 22),
+                                          )
+
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ))))));
   }
 
-  String getFundsInCurrency (var key) {
-    var roundOf = double.parse(fundsList[key].toStringAsFixed(2));
-    var amount = fundsList[key].toString();
-    var currencyAmount1 = "₹ "+amount;
-    var currencyAmount2 = "₹ "+roundOf.toString();
-  return currencyAmount2;
-  }
+  // String getFundsInCurrency(var key) {
+  //   var roundOf = double.parse(key.toStringAsFixed(2));
+  //   var amount = fundsList[key].toString();
+  //   var currencyAmount1 = "₹ " + amount;
+  //   var currencyAmount2 = "₹ " + roundOf.toString();
+  //   return currencyAmount2;
+  // }
 }
