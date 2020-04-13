@@ -20,8 +20,7 @@ class EImaratHome extends StatelessWidget {
                   Text(
                     titleText,
                     style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'Raleway',
+                      fontSize: 38,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -32,7 +31,7 @@ class EImaratHome extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  colors: <Color>[Color(0xff9706f0), Color(0xfffac0d8)],
+                  colors: <Color>[Colors.blue,Colors.indigo,Colors.teal],
                 ),
               ),
             ),
