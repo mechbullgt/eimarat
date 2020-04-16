@@ -334,7 +334,7 @@ class _ExpensesEntryHomeState extends State<ExpensesEntryHome> {
                       textColor: Colors.white,
                       onPressed: _submitForm,
                       child: Text(
-                        'Submit Sales Entry',
+                        'Submit Expenses Entry',
                         style: TextStyle(fontSize: 18),
                       ),
                     ),

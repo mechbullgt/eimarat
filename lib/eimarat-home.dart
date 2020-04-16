@@ -1,16 +1,17 @@
+import 'package:eimarat/screens/collections/fund-collections.dart';
+import 'package:eimarat/screens/expenses/expenses-entry-home.dart';
 import 'package:eimarat/screens/funds/all-funds.dart';
-import 'package:eimarat/screens/funds/expenses-entry-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
 import 'package:eimarat/screens/stock/stock-update-home.dart';
 import 'package:flutter/material.dart';
 
 class EImaratHome extends StatelessWidget {
-  final String titleText="e-Imarat";
+  final String titleText = "e-Imarat";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
-        length: 4,
+        length: 5,
         child: new Scaffold(
           appBar: AppBar(
             title: Column(
@@ -31,13 +32,24 @@ class EImaratHome extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  colors: <Color>[Colors.blue,Colors.indigo,Colors.teal],
+                  colors: <Color>[Colors.blue, Colors.indigo, Colors.teal],
                 ),
               ),
             ),
             bottom: TabBar(
               isScrollable: true,
               tabs: [
+                Tab(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Collections",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ]),
+                ),
                 Tab(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -85,6 +97,7 @@ class EImaratHome extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
+              FundsCollection(),
               FundsHome(),
               SalesEntryHome(),
               StockUpdateHome(),
