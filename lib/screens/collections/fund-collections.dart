@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:eimarat/resources/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class FundsCollection extends StatefulWidget {
+  final Endpoints endpoints = Endpoints();
+
   static const String routeName = "/collectionshome";
 
   @override
@@ -26,8 +29,10 @@ class _FundsCollectionState extends State<FundsCollection> {
 
   final String fundsCollectionCountURL =
       "https://script.google.com/macros/s/AKfycbzrv0imLQU3sbIYcpq4_WwxtSK4QO-dAnauIKpM3wKCK1vFRJc/exec";
-
+  final String fundsClientDetailsURL = Endpoints().getEndpoint('getClientDetails');
+  
   Map fundsList = new Map();
+  Map clientsDetailsList = new Map();
 
   void getFundsList() async {
     var response = await http.get(fundsCollectionCountURL);
@@ -37,32 +42,32 @@ class _FundsCollectionState extends State<FundsCollection> {
         fundsList = json.decode(response.body);
         _progressController = false;
       });
-      // print('runtimeType');
-      // print((fundsList['Cash']).runtimeType);
-      dataMap.putIfAbsent("Cash", () => (fundsList['Cash'] * -1));
-      dataMap.putIfAbsent("Bank", () => (fundsList['Bank']));
-      dataMap.putIfAbsent("Collection", () => (fundsList['Bank']));
-      // Future.delayed(const Duration(seconds: 10), () {
-      //   setState(() {
-      //     stockUpdateList = json.decode(response.body);
-      //     _progressController = false;
-      //   });
-      // });
-
-      // print('Loaded ${stockUpdateList.length} countries');
-      // print(stockUpdateList);
-      // print(stockUpdateList.keys.toList());
-      // print(stockUpdateList.keys.runtimeType);
-      // print(stockUpdateList.values.toList());
     } else {
       print(response.statusCode);
     }
   }
 
+    void getClientDetails () async {
+    var response = await http.get(fundsClientDetailsURL);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        clientsDetailsList = json.decode(response.body);
+        print('Client Details iIst');
+        print(clientsDetailsList);
+        _progressController = false;
+      });
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
     this.getFundsList();
+    this.getClientDetails();
   }
 
   @override
@@ -117,14 +122,14 @@ class _FundsCollectionState extends State<FundsCollection> {
                                         )
                                       ])),
                                       title: Text('$key'),
-                                      // trailing: CircleAvatar(
-                                      //   child: Text(
-                                      //     fundsList[key].toString(),
-                                      //     style:
-                                      //         TextStyle(color: Colors.white),
-                                      //   ),
-                                      //   backgroundColor: Colors.blue,
-                                      // )
+                                      trailing: CircleAvatar(
+                                        child: Text(
+                                          clientsDetailsList[0]['balanceAmount'].toString(),
+                                          style:
+                                              TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.blue,
+                                      )
                                     )
                                   ],
                                 ),
