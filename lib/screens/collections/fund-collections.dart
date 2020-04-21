@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:eimarat/resources/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 
 class FundsCollection extends StatefulWidget {
   final Endpoints endpoints = Endpoints();
@@ -24,7 +25,8 @@ class _FundsCollectionState extends State<FundsCollection> {
 
   // Map collectionCountList = new Map();
   List countList = new List();
-  Map clientsDetailsList = new Map();
+  // Map clientsDetailsList = new Map();
+  List clientsDetailsList = new List();
 
   void getcollectionCountList() async {
     var response = await http.get(fundsCollectionCountURL);
@@ -102,6 +104,12 @@ class _FundsCollectionState extends State<FundsCollection> {
                                         ),
                                         Padding(
                                           padding:
+                                              const EdgeInsets.only(right: 0.0),
+                                          child: billCardShareWidget(
+                                              contentForBillsCountShare(index)),
+                                        ),
+                                        Padding(
+                                          padding:
                                               const EdgeInsets.only(top: 60.0),
                                           child: totalBalanceWidget(index),
                                         ),
@@ -121,14 +129,15 @@ class _FundsCollectionState extends State<FundsCollection> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: clientsDetailsList.length,
-                itemBuilder: (BuildContext contect, int index) {
-                  String key =
-                      clientsDetailsList.keys.toList().elementAt(index);
-                  return Container(
+                itemBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 140,
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
                       child: Card(
-                        shape: StadiumBorder(),
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0))),
                         color: Colors.blueGrey.shade50,
                         elevation: 3,
                         child: Column(
@@ -137,43 +146,67 @@ class _FundsCollectionState extends State<FundsCollection> {
                               leading: ExcludeSemantics(
                                   child: Stack(children: <Widget>[
                                 CircleAvatar(
-                                  child: new Text(key),
+                                  child: new Text(clientsDetailsList[index]
+                                          ['clientName']
+                                      .toString()
+                                      .substring(0, 1)),
                                 ),
-                                // Positioned(
-                                //   right: 0,
-                                //   child: new Container(
-                                //     padding: EdgeInsets.all(2),
-                                //     decoration: new BoxDecoration(
-                                //       color: Colors.red,
-                                //       borderRadius:
-                                //           BorderRadius.circular(6),
-                                //     ),
-                                //     constraints: BoxConstraints(
-                                //       minWidth: 15,
-                                //       minHeight: 15,
-                                //     ),
-                                //     child: new Text(
-                                //       collectionCountList[key].toString(),
-                                //       style: new TextStyle(
-                                //         color: Colors.white,
-                                //         fontSize: 12,
-                                //       ),
-                                //       textAlign: TextAlign.center,
-                                //     ),
-                                //   ),
-                                // )
                               ])),
-                              title:
-                                  Text(clientsDetailsList[key]['clientName']),
-                              subtitle: Text(
-                                getClientSubTDetails(key),
-                                style: TextStyle(fontSize: 16),
+                              title: Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Text(
+                                  clientsDetailsList[index]['clientName'],
+                                  style: TextStyle(fontSize: 22),
+                                ),
                               ),
-                              trailing: Text(
-                                getClientBalanceAmount(key),
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                              ),
+                              subtitle: Padding(
+                                  padding: EdgeInsets.only(top: 5,bottom: 5),
+                                  child: (Column(
+                                    children: <Widget>[
+                                      Row(children: <Widget>[
+                                        Icon(Icons.date_range),
+                                        Text(
+                                          getDateClientDetails(index),
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        Text('   '),
+                                        Icon(Icons.list),
+                                        Text(
+                                          getChalNoClientDetails(index),
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ]),
+                                      Column(
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Text(
+                                                'Bill Amt: ₹ ' +
+                                                    getBillAmtClientDetails(
+                                                        index),
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                              Text(
+                                                ' | Paid Amt: ₹ ' +
+                                                    getPaidAmountClientDetails(
+                                                        index),
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(),
+                                          Text(
+                                            'Bal Amt: ₹ ' +
+                                                getBalAmountClientDetails(
+                                                    index),
+                                            style: TextStyle(fontSize: 20),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ))),
+                              trailing: billDetailsCardShareWidget(
+                                  contentForClientDetailsShare(index)),
                               isThreeLine: true,
                             )
                           ],
@@ -192,24 +225,22 @@ class _FundsCollectionState extends State<FundsCollection> {
     return 'Bal Amt.' + '\n' + '₹ ' + balanceAmt;
   }
 
-  String getClientSubTDetails(String key) {
-    var chalNo = clientsDetailsList[key]['challanNumb'].toStringAsFixed(0);
-    var paidAmt = clientsDetailsList[key]['paidAmount'].toStringAsFixed(0);
-    var billAmt = clientsDetailsList[key]['acutalAmount'].toStringAsFixed(0);
-    var date = clientsDetailsList[key]['date'].substring(2, 10);
-    var subText = 'Date: ' +
-        date +
-        " | " +
-        'Ch.No.:' +
-        chalNo +
-        "\n" +
-        "Paid Amt. ₹ " +
-        paidAmt +
-        " | " +
-        "Bill Amt. ₹ " +
-        billAmt;
-    return subText;
-  }
+  // String getClientSubTDetails(int key) {
+  //   var chalNo = getChalNoClientDetails(key);
+  //   var paidAmt = getPaidAmountClientDetails(key);
+  //   var billAmt = getBillAmtClientDetails(key);
+  //   var balAmt = getBalAmountClientDetails(key);
+  //   var date = getDateClientDetails(key);
+
+  //   var subText =
+  //       "Bill Amt. ₹ " +
+  //       billAmt +
+  //       "\nPaid Amt. ₹ " +
+  //       paidAmt +
+  //       "  |  Bal Amt. ₹ " +
+  //       balAmt;
+  //   return subText;
+  // }
 
   Widget totalBalanceWidget(var index) {
     return Align(
@@ -239,8 +270,70 @@ class _FundsCollectionState extends State<FundsCollection> {
             children: <TextSpan>[
               TextSpan(
                   text: '\n' + countList[index]['challanCount'].toString(),
-                  style: TextStyle(fontSize: 12))
+                  style: TextStyle(fontSize: 20))
             ]),
+      ),
+    );
+  }
+
+  Widget billCardShareWidget(var text) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+            top: -5,
+            right: -25,
+            child: Padding(
+                padding: const EdgeInsets.only(right: 0),
+                child: OutlineButton(
+                  shape: CircleBorder(),
+                  child: const Icon(
+                    Icons.share,
+                    color: Colors.white,
+                  ),
+                  onPressed: text.isEmpty
+                      ? null
+                      : () {
+                          final RenderBox box = context.findRenderObject();
+                          Share.share(text,
+                              subject: text,
+                              sharePositionOrigin:
+                                  box.localToGlobal(Offset.zero) & box.size);
+                        },
+                )))
+      ],
+    );
+  }
+
+  Widget billDetailsCardShareWidget(var text) {
+    return SizedBox(
+      height: 60,
+      width: 60,
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0,
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 0),
+                  child: OutlineButton(
+                    shape: CircleBorder(),
+                    child: const Icon(
+                      Icons.share,
+                      color: Colors.blue,
+                    ),
+                    onPressed: text.isEmpty
+                        ? null
+                        : () {
+                            final RenderBox box = context.findRenderObject();
+                            Share.share(text,
+                                subject: text,
+                                sharePositionOrigin:
+                                    box.localToGlobal(Offset.zero) & box.size);
+                          },
+                  )))
+        ],
       ),
     );
   }
@@ -254,14 +347,53 @@ class _FundsCollectionState extends State<FundsCollection> {
             textAlign: TextAlign.left,
             text: TextSpan(
               text: countList[index]['clientName'].toString(),
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(color: Colors.white, fontSize: 19),
             ),
           ),
         ));
   }
 
   String getTotalBalanceForWidget(index) {
-    var amt = countList[index]['totalBal'].toString();
+    var amt = countList[index]['totalBal'].toStringAsFixed(0);
     return '₹ ' + amt;
+  }
+
+  String contentForBillsCountShare(var index) {
+    var noBills = countList[index]['challanCount'].toString();
+    var balAmt = countList[index]['totalBal'].toStringAsFixed(0);
+    var clientName = countList[index]['clientName'].toString();
+
+    return 'Dear Sir,\nYour current balance is ₹ $balAmt/- against last $noBills bill/s. \n\nFrom: Imarat Supplies, Jagdalpur.\nTo: $clientName';
+  }
+
+  String contentForClientDetailsShare(int index) {
+    var chNo = clientsDetailsList[index]['challanNumb'].toString();
+    var date = clientsDetailsList[index]['date'].toString().substring(2, 10);
+    var paidAmt = clientsDetailsList[index]['paidAmount'].toStringAsFixed(0);
+    var billAmt = clientsDetailsList[index]['acutalAmount'].toStringAsFixed(0);
+    var balAmt = clientsDetailsList[index]['balanceAmount'].toStringAsFixed(0);
+    var clientName = clientsDetailsList[index]['clientName'].toString();
+
+    return 'Dear Sir,\nYour bill $chNo is pending. \nBill Date:$date\nBill Amt: ₹ $billAmt\nAmt Paid: ₹ $paidAmt\nOutstanding Bill Amt: ₹ $balAmt \n\nFrom: Imarat Supplies, Jagdalpur.\nTo: $clientName';
+  }
+
+  String getDateClientDetails(int key) {
+    return clientsDetailsList[key]['date'].substring(2, 10);
+  }
+
+  String getBalAmountClientDetails(int key) {
+    return clientsDetailsList[key]['balanceAmount'].toStringAsFixed(0);
+  }
+
+  String getBillAmtClientDetails(int key) {
+    return clientsDetailsList[key]['acutalAmount'].toStringAsFixed(0);
+  }
+
+  String getPaidAmountClientDetails(int key) {
+    return clientsDetailsList[key]['paidAmount'].toStringAsFixed(0);
+  }
+
+  String getChalNoClientDetails(int key) {
+    return clientsDetailsList[key]['challanNumb'].toString();
   }
 }

@@ -132,7 +132,7 @@ class _FundsCollectionState extends State<FundsCollection> {
                               //   )
                               // ])
                               // )
-                            )
+                            );
                                 // ]
 
                                 //  ListView.builder(
@@ -209,7 +209,7 @@ class _FundsCollectionState extends State<FundsCollection> {
                                 //         ),
                                 //       );
                                 //     })
-                          }))]))])),
+                          }))])),
                          
               
       _progressController
