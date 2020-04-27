@@ -13,26 +13,20 @@ class EImaratHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
-        length: 4,
+        length: 6,
         child: new Scaffold(
           appBar: AppBar(
             title: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Text(
-                  //   titleText,
-                  //   style: TextStyle(
-                  //     fontSize: 38,
-                  //     fontWeight: FontWeight.w400,
-                  //   ),
-                  // ),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Image.asset(
-                    'assets/images/logo1.png',
-                    fit: BoxFit.fitWidth,
+                  Text(
+                    titleText,
+                    style: TextStyle(
+                      fontSize: 38,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: 5)),
                 ]),
             centerTitle: true,
             flexibleSpace: Container(
@@ -47,13 +41,25 @@ class EImaratHome extends StatelessWidget {
             bottom: TabBar(
               isScrollable: true,
               tabs: [
+                                Tab(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Root",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ]),
+                ),
+
                 Tab(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Construction",
+                          "Collections",
                           style: TextStyle(fontSize: 18),
                         ),
                       ]),
@@ -64,7 +70,7 @@ class EImaratHome extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Plumbing",
+                          "Funds",
                           style: TextStyle(fontSize: 18),
                         ),
                       ]),
@@ -75,31 +81,42 @@ class EImaratHome extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "all/Funds",
+                          "Sales Entry",
                           style: TextStyle(fontSize: 18),
                         ),
                       ]),
                 ),
                 Tab(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "all/Collections",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ]),
-                ),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                      Text(
+                        "Stock Update",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ])),
+                Tab(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                      Text(
+                        "Expenses Entry",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ]))
               ],
             ),
           ),
           body: TabBarView(
             children: [
               ConsHome(),
-              SalesEntryHome(),
               FundsCollection(),
               FundsHome(),
+              SalesEntryHome(),
+              StockUpdateHome(),
+              ExpensesEntryHome()
             ],
           ),
         ));
