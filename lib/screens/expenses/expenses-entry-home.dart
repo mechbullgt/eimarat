@@ -1,4 +1,5 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:eimarat/common-calls/common-calls.dart';
 import 'package:eimarat/controller/expenses-form_controller.dart';
 import 'package:eimarat/model/expenses-form.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ class ExpensesEntryHome extends StatefulWidget {
 }
 
 class _ExpensesEntryHomeState extends State<ExpensesEntryHome> {
+  String routeName = ExpensesEntryHome.routeName;
+  AppBar commonAppBar;
+
   // String selectedClient;
   String selectedPayMode;
 
@@ -48,8 +52,8 @@ class _ExpensesEntryHomeState extends State<ExpensesEntryHome> {
   @override
   void initState() {
     super.initState();
-    // this.getClientsList();
-    // this.getProductsList();
+    commonAppBar = CommonCalls().getAppBarForConstruction(
+        CommonCalls().getPageNameAsPerRoute(routeName));
   }
 
   final FocusNode _purposeNode = FocusNode();
@@ -126,224 +130,225 @@ class _ExpensesEntryHomeState extends State<ExpensesEntryHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        // resizeToAvoidBottomPadding: false,
-        // appBar: AppBar(
-        //   title: Text(widget.title),
-        // ),
-        body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  child: Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          OutlineButton(
-                            child: Text(
-                              'Expenses Entry',
-                              style: TextStyle(fontSize: 22),
-                            ),
-                            onPressed: () {},
-                            shape: StadiumBorder(),
-                            borderSide: BorderSide(
-                                color: Colors.blue,
-                                style: BorderStyle.solid,
-                                width: 1),
-                            textColor: Colors.black,
-                          ),
-                          Expanded(child: Container()),
-                          OutlineButton(
-                            shape: StadiumBorder(),
-                            textColor: Colors.black,
-                            child: Text(
-                              '$dateTimeNow',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            borderSide: BorderSide(
-                                color: Colors.blue,
-                                style: BorderStyle.solid,
-                                width: 1),
-                            onPressed: () {},
-                          )
-                        ],
-                      )),
-                ),
-                Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, 5, 16, 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          DateTimePickerFormField(
-                            controller: dateController,
-                            inputType: InputType.date,
-                            format: DateFormat("MM/dd/yyyy"),
-                            initialDate: DateTime.now(),
-                            editable: false,
-                            decoration: InputDecoration(
-                              labelText: 'Expenses Date (MM/DD/YYYY)',
-                              hasFloatingPlaceholder: false,
-                              icon: const Icon(Icons.date_range),
-                              border: OutlineInputBorder(),
-                            ),
-                            onChanged: (dt) {
-                              setState(() => date2 = dt);
-                              print('Selected date: $date2');
-                            },
-                            autofocus: false,
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          TextFormField(
-                            controller: purposeController,
-                            focusNode: _purposeNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Enter Valid Purpose';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                                icon: const Icon(Icons.assignment),
-                                labelText: 'Add Expense Purpose',
-                                border: OutlineInputBorder()),
-                            autofocus: false,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (term) {
-                              _fieldFocusChange(
-                                  context, _purposeNode, _payModeNode);
-                            },
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          new FormField(
-                            builder: (FormFieldState state) {
-                              return InputDecorator(
-                                  decoration: InputDecoration(
-                                    icon: const Icon(
-                                        Icons.account_balance_wallet),
-                                    labelText: 'Expense/Pay Mode',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  child: new DropdownButtonHideUnderline(
-                                    child: new DropdownButton(
-                                      hint: new Text("Select Pay Mode"),
-                                      items: dataPayModes.map((item) {
-                                        return new DropdownMenuItem(
-                                          child: new Text(item),
-                                          value: item.toString(),
-                                        );
-                                      }).toList(),
-                                      autofocus: false,
-                                      onChanged: (newVal) {
-                                        setState(() {
-                                          payModeController.text = newVal;
-                                          selectedPayMode = newVal;
-                                        });
-                                      },
-                                      value: selectedPayMode,
-                                    ),
-                                  ));
-                            },
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          TextFormField(
-                            controller: amountController,
-                            focusNode: _amountNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Enter Valid Amount';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                icon: const Icon(Icons.attach_money),
-                                labelText: 'Amount',
-                                border: OutlineInputBorder()),
-                            autofocus: false,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (term) {
-                              _fieldFocusChange(
-                                  context, _amountNode, _remarksNode);
-                            },
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          TextFormField(
-                            controller: remarksController,
-                            focusNode: _remarksNode,
-                            // validator: (value) {
-                            //   if (value.isEmpty) {
-                            //     return 'Enter Valid Feedback';
-                            //   }
-                            //   return null;
-                            // },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                                icon: const Icon(Icons.comment),
-                                labelText: 'Remarks',
-                                border: OutlineInputBorder()),
-                            autofocus: false,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (term) {
-                              _remarksNode.unfocus();
-                            },
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                        ],
+      appBar: PreferredSize(
+          child: commonAppBar, preferredSize: Size.fromHeight(75.0)),
+
+      key: _scaffoldKey,
+      // resizeToAvoidBottomPadding: false,
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      OutlineButton(
+                        child: Text(
+                          'Expenses Entry',
+                          style: TextStyle(fontSize: 22),
+                        ),
+                        onPressed: () {},
+                        shape: StadiumBorder(),
+                        borderSide: BorderSide(
+                            color: Colors.blue,
+                            style: BorderStyle.solid,
+                            width: 1),
+                        textColor: Colors.black,
                       ),
-                    )),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    RaisedButton(
-                      color: Colors.red.shade400,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(15.0)),
-                      textColor: Colors.white,
-                      onPressed: () {
-                        _formKey.currentState.reset();
-                        dateController.clear();
-                        purposeController.clear();
-                        payModeController.clear();
-                        amountController.clear();
-                        remarksController.clear();
-                      },
-                      child: Text(
-                        'Clear Previous Data',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    RaisedButton(
-                      color: Colors.green.shade400,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(15.0)),
-                      textColor: Colors.white,
-                      onPressed: _submitForm,
-                      child: Text(
-                        'Submit Expenses Entry',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ],
-                )
-              ],
+                      Expanded(child: Container()),
+                      OutlineButton(
+                        shape: StadiumBorder(),
+                        textColor: Colors.black,
+                        child: Text(
+                          '$dateTimeNow',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        borderSide: BorderSide(
+                            color: Colors.blue,
+                            style: BorderStyle.solid,
+                            width: 1),
+                        onPressed: () {},
+                      )
+                    ],
+                  )),
             ),
-          ),
-        );
+            Form(
+                key: _formKey,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16, 5, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      DateTimePickerFormField(
+                        controller: dateController,
+                        inputType: InputType.date,
+                        format: DateFormat("MM/dd/yyyy"),
+                        initialDate: DateTime.now(),
+                        editable: false,
+                        decoration: InputDecoration(
+                          labelText: 'Expenses Date (MM/DD/YYYY)',
+                          hasFloatingPlaceholder: false,
+                          icon: const Icon(Icons.date_range),
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (dt) {
+                          setState(() => date2 = dt);
+                          print('Selected date: $date2');
+                        },
+                        autofocus: false,
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      TextFormField(
+                        controller: purposeController,
+                        focusNode: _purposeNode,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Enter Valid Purpose';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            icon: const Icon(Icons.assignment),
+                            labelText: 'Add Expense Purpose',
+                            border: OutlineInputBorder()),
+                        autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(
+                              context, _purposeNode, _payModeNode);
+                        },
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      new FormField(
+                        builder: (FormFieldState state) {
+                          return InputDecorator(
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.account_balance_wallet),
+                                labelText: 'Expense/Pay Mode',
+                                border: OutlineInputBorder(),
+                              ),
+                              child: new DropdownButtonHideUnderline(
+                                child: new DropdownButton(
+                                  hint: new Text("Select Pay Mode"),
+                                  items: dataPayModes.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item),
+                                      value: item.toString(),
+                                    );
+                                  }).toList(),
+                                  autofocus: false,
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      payModeController.text = newVal;
+                                      selectedPayMode = newVal;
+                                    });
+                                  },
+                                  value: selectedPayMode,
+                                ),
+                              ));
+                        },
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      TextFormField(
+                        controller: amountController,
+                        focusNode: _amountNode,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Enter Valid Amount';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            icon: const Icon(Icons.attach_money),
+                            labelText: 'Amount',
+                            border: OutlineInputBorder()),
+                        autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(context, _amountNode, _remarksNode);
+                        },
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      TextFormField(
+                        controller: remarksController,
+                        focusNode: _remarksNode,
+                        // validator: (value) {
+                        //   if (value.isEmpty) {
+                        //     return 'Enter Valid Feedback';
+                        //   }
+                        //   return null;
+                        // },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            icon: const Icon(Icons.comment),
+                            labelText: 'Remarks',
+                            border: OutlineInputBorder()),
+                        autofocus: false,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term) {
+                          _remarksNode.unfocus();
+                        },
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                    ],
+                  ),
+                )),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                RaisedButton(
+                  color: Colors.red.shade400,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
+                  textColor: Colors.white,
+                  onPressed: () {
+                    _formKey.currentState.reset();
+                    dateController.clear();
+                    purposeController.clear();
+                    payModeController.clear();
+                    amountController.clear();
+                    remarksController.clear();
+                  },
+                  child: Text(
+                    'Clear Previous Data',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                RaisedButton(
+                  color: Colors.green.shade400,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
+                  textColor: Colors.white,
+                  onPressed: _submitForm,
+                  child: Text(
+                    'Submit Expenses Entry',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

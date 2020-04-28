@@ -1,7 +1,9 @@
+import 'package:eimarat/common-calls/common-calls.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ConsHome extends StatefulWidget {
+  CommonCalls commonCalls = new CommonCalls();
   static const String routeName = "/consHome";
 
   @override
@@ -28,54 +30,33 @@ class _ConsHomeState extends State<ConsHome> {
         //   title: Text(widget.title),
         // ),
         body: GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: 1.5,
+            crossAxisCount: 1,
+            childAspectRatio: 3,
             children: <Widget>[
               GridTile(
-                child: getChildGoToCard('/collectionshome', Colors.blue,
-                    Icons.account_balance_wallet, 'Pending Collections'),
+                child: CommonCalls().getChildGoToCard(
+                    context,
+                    '/collectionshome',
+                    Colors.orange,
+                    Icons.account_balance_wallet,
+                    'Pending Collections'),
+              ),
+              GridTile(
+                child: CommonCalls().getChildGoToCard(context, '/fundshome',
+                    Colors.green, Icons.attach_money, 'All Funds'),
+              ),
+              GridTile(
+                child: CommonCalls().getChildGoToCard(context, '/stockhome',
+                    Colors.purple, Icons.info_outline, 'Current Stock'),
+              ),
+              GridTile(
+                child: CommonCalls().getChildGoToCard(context, '/exhome',
+                    Colors.indigo, Icons.input, 'Expenses Entry'),
+              ),
+              GridTile(
+                child: CommonCalls().getChildGoToCard(context, '/shome',
+                    Colors.teal, Icons.keyboard, 'Sales Entry'),
               )
             ]));
-  }
-
-  getChildGoToCard(routeName, cardColor, cardIcon, cardText) {
-    return InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(routeName);
-          print('Tapped on $routeName');
-        },
-        child: Card(
-          // color: cardColor,
-          child: new Center(
-              child: ListTile(
-                  leading: ExcludeSemantics(
-                      child: Stack(children: <Widget>[
-                    CircleAvatar(
-                      child: Icon(cardIcon),
-                    ),
-                  ])),
-                  title: Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Text(
-                      cardText,
-                      style: TextStyle(fontSize: 22),
-                    ),
-                  ),
-                  subtitle: Padding(
-                      padding: EdgeInsets.only(top: 5, bottom: 5),
-                      child: (Column(children: <Widget>[
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Padding(padding: EdgeInsets.only(left: 55)),
-                              Text(
-                                'Go To',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Padding(padding: EdgeInsets.only(top: 50)),
-                              Icon(Icons.arrow_right),
-                            ])
-                      ]))))),
-        ));
   }
 }

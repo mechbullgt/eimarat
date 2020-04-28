@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:eimarat/common-calls/common-calls.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +13,9 @@ class StockUpdateHome extends StatefulWidget {
 }
 
 class _StockUpdateHomeState extends State<StockUpdateHome> {
+  String routeName = StockUpdateHome.routeName;
+  AppBar commonAppBar;
+
   String selectedClient;
   bool _progressController = true;
 
@@ -48,6 +52,9 @@ class _StockUpdateHomeState extends State<StockUpdateHome> {
   @override
   void initState() {
     super.initState();
+    commonAppBar = CommonCalls().getAppBarForConstruction(
+        CommonCalls().getPageNameAsPerRoute(routeName));
+
     this.getStockUpdateList();
   }
 
@@ -56,39 +63,49 @@ class _StockUpdateHomeState extends State<StockUpdateHome> {
     final Random randomVariable = Random();
 
     return new Scaffold(
+        appBar: PreferredSize(
+            child: commonAppBar, preferredSize: Size.fromHeight(75.0)),
         body: Scrollbar(
             child: new Center(
                 child: _progressController
                     ? const CircularProgressIndicator()
-                    : new ListView.builder(
+                    : new GridView.builder(
                         shrinkWrap: true,
                         itemCount: stockUpdateList.length,
                         itemBuilder: (BuildContext context, int index) {
                           String key =
                               stockUpdateList.keys.toList().elementAt(index);
-                          // padding:
-                          //     EdgeInsets.symmetric(vertical: 8),
-                          return ListTile(
-                              leading: ExcludeSemantics(
-                                  child: CircleAvatar(
-                                child: new Text(
-                                  '${key[0]}',
-                                ),
-                                // backgroundColor: Color.fromARGB(
-                                //     randomVariable.nextInt(255),
-                                //     randomVariable.nextInt(255),
-                                //     randomVariable.nextInt(255),
-                                //     randomVariable.nextInt(255)),
-                                backgroundColor: Colors.primaries[randomVariable.nextInt(Colors.primaries.length)]
-                              )),
-                              title: Text(
-                                '$key',
-                                style: TextStyle(fontSize: 22),
-                              ),
-                              subtitle: new Text(
-                                stockUpdateList[key].toStringAsFixed(0),
-                                style: TextStyle(fontSize: 22),
-                              ));
-                        }))));
+                          return GridTile(
+                              child: Card(
+                                  child: ListTile(
+                                      leading: ExcludeSemantics(
+                                          child: CircleAvatar(
+                                              child: new Text(
+                                                '${key[0]}',
+                                              ),
+                                              backgroundColor: Colors.primaries[
+                                                  randomVariable.nextInt(Colors
+                                                      .primaries.length)])),
+                                      title: RichText(
+                                          text: TextSpan(children: <TextSpan>[
+                                        TextSpan(
+                                          text: '$key',
+                                          style: TextStyle(fontSize: 18,color: Colors.black),
+                                        ),
+                                                                                TextSpan(
+                                          text: '\n----------\n',
+                                          style: TextStyle(fontSize: 18,color: Colors.grey),
+                                        ),
+
+                                        TextSpan(
+                                          text: stockUpdateList[key]
+                                              .toStringAsFixed(0),
+                                          style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700,color: Colors.black),
+                                        )
+                                      ])),
+                                      )));
+                        },
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: 1.7)))));
   }
 }

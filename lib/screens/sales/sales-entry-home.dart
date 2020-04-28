@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:eimarat/common-calls/common-calls.dart';
 import 'package:eimarat/controller/sales-form_controller.dart';
 import 'package:eimarat/model/sales-form.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ class SalesEntryHome extends StatefulWidget {
 }
 
 class _SalesEntryHomeState extends State<SalesEntryHome> {
+  String routeName = SalesEntryHome.routeName;
+  AppBar commonAppBar;
+
   String selectedClient;
   String selectedProduct;
 
@@ -50,6 +54,9 @@ class _SalesEntryHomeState extends State<SalesEntryHome> {
   @override
   void initState() {
     super.initState();
+    commonAppBar = CommonCalls().getAppBarForConstruction(
+        CommonCalls().getPageNameAsPerRoute(routeName));
+
     this.getClientsList();
     this.getProductsList();
   }
@@ -132,6 +139,9 @@ class _SalesEntryHomeState extends State<SalesEntryHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+          child: commonAppBar, preferredSize: Size.fromHeight(75.0)),
+
       key: _scaffoldKey,
       // resizeToAvoidBottomPadding: false,
       // appBar: AppBar(

@@ -3,7 +3,6 @@ import 'package:eimarat/screens/expenses/expenses-entry-home.dart';
 import 'package:eimarat/screens/funds/all-funds.dart';
 import 'package:eimarat/screens/home/cons-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
-import 'package:eimarat/screens/stock/stock-update-home.dart';
 import 'package:flutter/material.dart';
 
 class EImaratHome extends StatelessWidget {
@@ -20,13 +19,6 @@ class EImaratHome extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Text(
-                  //   titleText,
-                  //   style: TextStyle(
-                  //     fontSize: 38,
-                  //     fontWeight: FontWeight.w400,
-                  //   ),
-                  // ),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Image.asset(
                     'assets/images/logo1.png',
@@ -95,6 +87,7 @@ class EImaratHome extends StatelessWidget {
             ),
           ),
           body: TabBarView(
+            physics: BouncingScrollPhysics(),
             children: [
               ConsHome(),
               SalesEntryHome(),

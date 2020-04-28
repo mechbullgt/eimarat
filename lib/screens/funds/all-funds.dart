@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:eimarat/common-calls/common-calls.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pie_chart/pie_chart.dart';
@@ -11,6 +12,9 @@ class FundsHome extends StatefulWidget {
 }
 
 class _FundsHomeState extends State<FundsHome> {
+  String routeName = FundsHome.routeName;
+  AppBar commonAppBar;
+
   bool _progressController = true;
   bool toggle = false;
 
@@ -63,89 +67,98 @@ class _FundsHomeState extends State<FundsHome> {
   @override
   void initState() {
     super.initState();
+    commonAppBar = CommonCalls().getAppBarForConstruction(
+        CommonCalls().getPageNameAsPerRoute(routeName));
+
     this.getFundsList();
   }
 
   @override
   Widget build(BuildContext context) {
-    double cardIconSize = 40;
-        return new Scaffold(
-            body: Scrollbar(
-                child: new Center(
-          child: _progressController
-              ? const CircularProgressIndicator()
-              : new SingleChildScrollView(
-                  padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                          elevation: 5,
-                          child: Container(
-                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                              child: Column(children: <Widget>[
-                                Container(
-                                  child: Stack(
-                                    overflow: Overflow.visible,
-                                    children: <Widget>[
-                                      Card(
-                                        child: Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 10, 10, 15),
-                                        child: PieChart(
-                                          dataMap: dataMap,
-                                          animationDuration:
-                                              Duration(milliseconds: 800),
-                                          chartLegendSpacing: 32.0,
-                                          chartRadius:
-                                              MediaQuery.of(context).size.width /
-                                                  1.4,
-                                          showChartValuesInPercentage: true,
-                                          showChartValues: false,
-                                          showChartValuesOutside: true,
-                                          chartValueBackgroundColor:
-                                              Colors.grey[200],
-                                          colorList: [cashInHand,cashInBank,cashPending],
-                                          showLegends: false,
-                                          legendPosition: LegendPosition.bottom,
-                                          decimalPlaces: 1,
-                                          showChartValueLabel: true,
-                                          initialAngle: 0,
-                                          chartValueStyle:
-                                              defaultChartValueStyle.copyWith(
-                                            color: Colors.blueGrey[900]
-                                                .withOpacity(0.9),
-                                          ),
-                                          chartType: ChartType.ring,
-                                        ),
-                                      )),
-                                      Positioned.fill(
-                                          child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          getTotalValue(),
-                                          style: TextStyle(
-                                              fontSize: 50.0,
-                                              color: Colors.green.shade800,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ))
-                                    ],
-                                  ),
-                                ),
-                                Card(
-                                  child: Padding(
-                                      padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-                                      child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
-                                        ),
-                                        color: cashInHand,
-                                        elevation:3,
-                                        child: Column(
-                                          children: <Widget>[
-                                            new ListTile(
-                                              leading: Icon(Icons.offline_bolt,
-                                                  size: cardIconSize),
+    double cardIconSize = 42;
+    return new Scaffold(
+      appBar: PreferredSize(child:commonAppBar , preferredSize: Size.fromHeight(75.0)),
+        body: Scrollbar(
+            child: new Padding(
+                            padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+
+      child: _progressController
+          ? const CircularProgressIndicator()
+          : new SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Card(
+                      elevation: 5,
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                          child: Column(children: <Widget>[
+                            Container(
+                              child: Stack(
+                                overflow: Overflow.visible,
+                                children: <Widget>[
+                                  Card(
+                                      child: Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(10, 10, 10, 15),
+                                    child: PieChart(
+                                      dataMap: dataMap,
+                                      animationDuration:
+                                          Duration(milliseconds: 800),
+                                      chartLegendSpacing: 32.0,
+                                      chartRadius:
+                                          MediaQuery.of(context).size.width /
+                                              1.4,
+                                      showChartValuesInPercentage: true,
+                                      showChartValues: false,
+                                      showChartValuesOutside: true,
+                                      chartValueBackgroundColor:
+                                          Colors.grey[200],
+                                      colorList: [
+                                        cashInHand,
+                                        cashInBank,
+                                        cashPending
+                                      ],
+                                      showLegends: false,
+                                      legendPosition: LegendPosition.bottom,
+                                      decimalPlaces: 1,
+                                      showChartValueLabel: true,
+                                      initialAngle: 0,
+                                      chartValueStyle:
+                                          defaultChartValueStyle.copyWith(
+                                        color: Colors.blueGrey[900]
+                                            .withOpacity(0.9),
+                                      ),
+                                      chartType: ChartType.ring,
+                                    ),
+                                  )),
+                                  Positioned.fill(
+                                      child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      getTotalValue(),
+                                      style: TextStyle(
+                                          fontSize: 50.0,
+                                          color: Colors.green.shade800,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ))
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    color: cashInHand,
+                                    elevation: 3,
+                                    child: Column(
+                                      children: <Widget>[
+                                        new ListTile(
+                                          leading: Icon(Icons.offline_bolt,
+                                              size: cardIconSize),
                                           title: Text('Cash In Hand',
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -172,7 +185,8 @@ class _FundsHomeState extends State<FundsHome> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         new ListTile(
-                                          leading: Icon(Icons.domain, size: cardIconSize),
+                                          leading: Icon(Icons.domain,
+                                              size: cardIconSize),
                                           title: Text('Cash In Bank',
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -198,8 +212,8 @@ class _FundsHomeState extends State<FundsHome> {
                                     child: Column(
                                       children: <Widget>[
                                         new ListTile(
-                                          leading:
-                                              Icon(Icons.do_not_disturb_on, size: cardIconSize),
+                                          leading: Icon(Icons.do_not_disturb_on,
+                                              size: cardIconSize),
                                           title: Text('Pending Collection',
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -225,8 +239,8 @@ class _FundsHomeState extends State<FundsHome> {
                                     child: Column(
                                       children: <Widget>[
                                         new ListTile(
-                                          leading:
-                                              Icon(Icons.donut_large, size: cardIconSize),
+                                          leading: Icon(Icons.donut_large,
+                                              size: cardIconSize),
                                           title: Text('Total Funds',
                                               style: TextStyle(
                                                   color: Colors.white,
