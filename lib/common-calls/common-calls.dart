@@ -44,23 +44,60 @@ class CommonCalls {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(left:25),
+              padding: EdgeInsets.only(left: 25),
               child: ListTile(
-                leading:Image.asset(
-                    'assets/images/elogo.png',
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.fitWidth,
-                  ),
-                  title: Text(
-                    '/ '+titleText,
-                    style: TextStyle(
+                leading: Image.asset(
+                  'assets/images/elogo.png',
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.fitWidth,
+                ),
+                title: Text(
+                  '/ ' + titleText,
+                  style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w400,
-                      color: Colors.white
-                    ),
-                  ),
-                
+                      color: Colors.white),
+                ),
+              ),
+            )
+          ]),
+      centerTitle: true,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: <Color>[Colors.blue, Colors.indigo, Colors.teal],
+          ),
+        ),
+      ),
+    );
+  }
+
+  AppBar getBlankAppBar(String titleText) {
+    return AppBar(
+      title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 25),
+              child: ListTile(
+                leading: Image.asset(
+                  'assets/images/elogo.png',
+                  width: 0,
+                  height: 0,
+                  fit: BoxFit.fitWidth,
+                ),
+                title: Text(
+                  // '/ ' + titleText,
+                  '',
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
+                ),
               ),
             )
           ]),
@@ -93,29 +130,28 @@ class CommonCalls {
     );
   }
 
-
-String getPageNameAsPerRoute(var routeName){
-  switch (routeName) {
-    case '/collectionshome':
-      return 'Collections';
-      break;
-          case '/fundshome':
-      return 'Funds';
-      break;
-    case '/stockhome':
-      return 'Stock';
-      break;
-    case '/collectionshome':
-      return 'Collections';
-      break;
-    case '/exhome':
-      return 'Expenses Entry';
-      break;
-    case '/shome':
-      return 'Sales Entry';
-      break;
-    default:
-    return 'e-Imarat';
+  String getPageNameAsPerRoute(var routeName) {
+    switch (routeName) {
+      case '/collectionshome':
+        return 'Collections';
+        break;
+      case '/fundshome':
+        return 'Funds';
+        break;
+      case '/stockhome':
+        return 'Stock';
+        break;
+      case '/collectionshome':
+        return 'Collections';
+        break;
+      case '/exhome':
+        return 'Expenses Entry';
+        break;
+      case '/shome':
+        return 'Sales Entry';
+        break;
+      default:
+        return 'e-Imarat';
+    }
   }
-}
 }

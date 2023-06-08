@@ -30,8 +30,10 @@ class _ConsHomeState extends State<ConsHome> {
         //   title: Text(widget.title),
         // ),
         body: GridView.count(
-            crossAxisCount: 1,
-            childAspectRatio: 3,
+            primary: false,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 2,
             children: <Widget>[
               GridTile(
                 child: CommonCalls().getChildGoToCard(

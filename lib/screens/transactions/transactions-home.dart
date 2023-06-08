@@ -7,36 +7,38 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-class SalesEntryHome extends StatefulWidget {
+class TransactionsHome extends StatefulWidget {
   static const String routeName = "/shome";
 
   @override
-  _SalesEntryHomeState createState() => new _SalesEntryHomeState();
+  _TransactionsHomeState createState() => new _TransactionsHomeState();
 }
 
-class _SalesEntryHomeState extends State<SalesEntryHome> {
-  String routeName = SalesEntryHome.routeName;
+class _TransactionsHomeState extends State<TransactionsHome> {
+  String routeName = TransactionsHome.routeName;
   AppBar commonAppBar;
 
   String selectedClient;
   String selectedProduct;
 
-  final String clientListURL =
-      "https://script.google.com/macros/s/AKfycbyIaIR_Ix2KsuX6eYrn3EtywbHwmvn1IAYI3BkhoGK5lTTflrkB/exec";
+  final String transactionTypeListURL =
+      "https://script.google.com/macros/s/AKfycbxeikis3XBiWCqdSVGHxlaQfiPL13AUxB8DhUPklXrN2XMop4Bspm-vCsrH2MH-FhhEoQ/exec";
+
   final String productsListURL =
       "https://script.google.com/macros/s/AKfycbybYyrjOjw0tPGVcSbqMjKgvoXMHoiyYIeb3YQDp_KK1b4sfFw/exec";
 
-  List dataClientsList = List();
+  List dataTransactionsTypeList = List();
   List dataProductsList = List();
 
-  Future<String> getClientsList() async {
-    var res = await http.get(Uri.encodeFull(clientListURL),
+  Future<String> getTransactionsTypeList() async {
+    var res = await http.get(Uri.encodeFull(transactionTypeListURL),
         headers: {"Accept": "application/json"});
-    // print('Future<String> getClientsList() async {');
+    // print('getTransactionsTypeList()');
     // print(res.body);
     Map<String, dynamic> resBody = json.decode(res.body);
     setState(() {
-      dataClientsList = resBody['clientNamesAPI'];
+      dataTransactionsTypeList = resBody['transactionTypeListAPI'];
+      print(dataTransactionsTypeList);
     });
     return "Success";
   }
@@ -55,10 +57,10 @@ class _SalesEntryHomeState extends State<SalesEntryHome> {
   @override
   void initState() {
     super.initState();
-    commonAppBar = CommonCalls().getAppBarForConstruction(
-        CommonCalls().getPageNameAsPerRoute(routeName));
+    commonAppBar = CommonCalls()
+        .getBlankAppBar(CommonCalls().getPageNameAsPerRoute(routeName));
 
-    this.getClientsList();
+    this.getTransactionsTypeList();
     this.getProductsList();
   }
 
@@ -141,7 +143,7 @@ class _SalesEntryHomeState extends State<SalesEntryHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          child: commonAppBar, preferredSize: Size.fromHeight(75.0)),
+          child: commonAppBar, preferredSize: Size.fromHeight(0.0)),
 
       key: _scaffoldKey,
       // resizeToAvoidBottomPadding: false,
@@ -160,8 +162,8 @@ class _SalesEntryHomeState extends State<SalesEntryHome> {
                     children: <Widget>[
                       OutlineButton(
                         child: Text(
-                          'Sales Entry',
-                          style: TextStyle(fontSize: 22),
+                          'Transactions Update ',
+                          style: TextStyle(fontSize: 12),
                         ),
                         onPressed: () {},
                         shape: StadiumBorder(),
@@ -218,13 +220,13 @@ class _SalesEntryHomeState extends State<SalesEntryHome> {
                           return InputDecorator(
                               decoration: InputDecoration(
                                 icon: const Icon(Icons.account_circle),
-                                labelText: 'Client Name',
+                                labelText: 'Transaction Type',
                                 border: OutlineInputBorder(),
                               ),
                               child: new DropdownButtonHideUnderline(
                                 child: new DropdownButton(
-                                  hint: new Text("Select Client Name"),
-                                  items: dataClientsList.map((item) {
+                                  hint: new Text("Select Transaction"),
+                                  items: dataTransactionsTypeList.map((item) {
                                     return new DropdownMenuItem(
                                       child: new Text(item),
                                       value: item.toString(),

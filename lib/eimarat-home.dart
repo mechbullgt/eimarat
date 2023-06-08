@@ -3,6 +3,7 @@ import 'package:eimarat/screens/expenses/expenses-entry-home.dart';
 import 'package:eimarat/screens/funds/all-funds.dart';
 import 'package:eimarat/screens/home/cons-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
+import 'package:eimarat/screens/transactions/transactions-home.dart';
 import 'package:flutter/material.dart';
 
 class EImaratHome extends StatelessWidget {
@@ -12,11 +13,11 @@ class EImaratHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
-        length: 4,
+        length: 5,
         child: new Scaffold(
           appBar: AppBar(
             title: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(padding: EdgeInsets.only(top: 10)),
@@ -26,7 +27,7 @@ class EImaratHome extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(top: 5)),
                 ]),
-            centerTitle: true,
+            centerTitle: false,
             flexibleSpace: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -36,59 +37,84 @@ class EImaratHome extends StatelessWidget {
                 ),
               ),
             ),
-            bottom: TabBar(
-              isScrollable: true,
-              tabs: [
-                Tab(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Construction",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ]),
-                ),
-                Tab(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Plumbing",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ]),
-                ),
-                Tab(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "all/Funds",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ]),
-                ),
-                Tab(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "all/Collections",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ]),
-                ),
-              ],
-            ),
+            bottom: new PreferredSize(
+                preferredSize: new Size(0.0, 80.0),
+                child: new Container(
+                  height: 80.0,
+                  child: new TabBar(
+                    isScrollable: true,
+                    tabs: [
+                      Tab(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.message),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(
+                                "Transactions",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                      ),
+                      Tab(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.store),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(
+                                "Store",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                      ),
+                      Tab(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Insights",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                      ),
+                      Tab(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Utilities",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                      ),
+                      Tab(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Collections",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                )),
           ),
           body: TabBarView(
             physics: BouncingScrollPhysics(),
             children: [
+              TransactionsHome(),
               ConsHome(),
               SalesEntryHome(),
               FundsCollection(),
