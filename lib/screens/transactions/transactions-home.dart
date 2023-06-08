@@ -18,7 +18,7 @@ class _TransactionsHomeState extends State<TransactionsHome> {
   String routeName = TransactionsHome.routeName;
   AppBar commonAppBar;
 
-  String selectedClient;
+  String selectedTransactionType;
   String selectedProduct;
 
   final String transactionTypeListURL =
@@ -236,10 +236,10 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                                   onChanged: (newVal) {
                                     setState(() {
                                       clientNameController.text = newVal;
-                                      selectedClient = newVal;
+                                      selectedTransactionType = newVal;
                                     });
                                   },
-                                  value: selectedClient,
+                                  value: selectedTransactionType,
                                 ),
                               ));
                         },
@@ -389,7 +389,7 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                   onPressed: () {
                     _formKey.currentState.reset();
                     dateController.clear();
-                    selectedClient = null;
+                    selectedTransactionType = null;
                     selectedProduct = null;
                     quantityController.clear();
                     bundlePieceController.clear();
