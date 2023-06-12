@@ -24,11 +24,19 @@ class _TransactionsHomeState extends State<TransactionsHome> {
   final String transactionTypeListURL =
       "https://script.google.com/macros/s/AKfycbxeikis3XBiWCqdSVGHxlaQfiPL13AUxB8DhUPklXrN2XMop4Bspm-vCsrH2MH-FhhEoQ/exec";
 
-  final String productsListURL =
-      "https://script.google.com/macros/s/AKfycbybYyrjOjw0tPGVcSbqMjKgvoXMHoiyYIeb3YQDp_KK1b4sfFw/exec";
+  final String clientSiteListURL =
+      "https://script.google.com/macros/s/AKfycbyIaIR_Ix2KsuX6eYrn3EtywbHwmvn1IAYI3BkhoGK5lTTflrkB/exec";
 
   List dataTransactionsTypeList = List();
-  List dataProductsList = List();
+  List dataTransactionsTypeHardList = [
+    'Credit',
+    'Debit Detailed',
+    'Reminder',
+    'Debit Lite',
+    'Follow up',
+    'Payment'
+  ];
+  List dataClientSiteList = List();
 
   Future<String> getTransactionsTypeList() async {
     var res = await http.get(Uri.encodeFull(transactionTypeListURL),
@@ -43,13 +51,13 @@ class _TransactionsHomeState extends State<TransactionsHome> {
     return "Success";
   }
 
-  Future<String> getProductsList() async {
-    var res = await http.get(Uri.encodeFull(productsListURL),
+  Future<String> getClientSiteList() async {
+    var res = await http.get(Uri.encodeFull(clientSiteListURL),
         headers: {"Accept": "application/json"});
 
     Map<String, dynamic> resBody = json.decode(res.body);
     setState(() {
-      dataProductsList = resBody['productsListAPI'];
+      dataClientSiteList = resBody['clientNamesAPI'];
     });
     return "Success";
   }
@@ -61,7 +69,7 @@ class _TransactionsHomeState extends State<TransactionsHome> {
         .getBlankAppBar(CommonCalls().getPageNameAsPerRoute(routeName));
 
     this.getTransactionsTypeList();
-    this.getProductsList();
+    this.getClientSiteList();
   }
 
   final FocusNode _quantityFocus = FocusNode();
@@ -214,36 +222,6 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                           print('Selected date: $date2');
                         },
                       ),
-                      SizedBox(height: 10.0),
-                      new FormField(
-                        builder: (FormFieldState state) {
-                          return InputDecorator(
-                              decoration: InputDecoration(
-                                icon: const Icon(Icons.account_circle),
-                                labelText: 'Transaction Type',
-                                border: OutlineInputBorder(),
-                              ),
-                              child: new DropdownButtonHideUnderline(
-                                child: new DropdownButton(
-                                  hint: new Text("Select Transaction"),
-                                  items: dataTransactionsTypeList.map((item) {
-                                    return new DropdownMenuItem(
-                                      child: new Text(item),
-                                      value: item.toString(),
-                                    );
-                                  }).toList(),
-                                  autofocus: false,
-                                  onChanged: (newVal) {
-                                    setState(() {
-                                      clientNameController.text = newVal;
-                                      selectedTransactionType = newVal;
-                                    });
-                                  },
-                                  value: selectedTransactionType,
-                                ),
-                              ));
-                        },
-                      ),
                       SizedBox(
                         height: 8.0,
                       ),
@@ -251,14 +229,14 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                         builder: (FormFieldState state) {
                           return InputDecorator(
                               decoration: InputDecoration(
-                                icon: const Icon(Icons.shopping_cart),
-                                labelText: 'Product Name',
+                                icon: const Icon(Icons.people),
+                                labelText: 'Client/Site',
                                 border: OutlineInputBorder(),
                               ),
                               child: new DropdownButtonHideUnderline(
                                 child: new DropdownButton(
-                                  hint: new Text("Select Product"),
-                                  items: dataProductsList.map((item) {
+                                  hint: new Text("Select Client/Site"),
+                                  items: dataClientSiteList.map((item) {
                                     return new DropdownMenuItem(
                                       child: new Text(item),
                                       value: item.toString(),
@@ -280,30 +258,6 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                         height: 8.0,
                       ),
                       TextFormField(
-                        controller: quantityController,
-                        focusNode: _quantityFocus,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Enter Valid Quantity';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            icon: const Icon(Icons.code),
-                            labelText: 'Quantity',
-                            border: OutlineInputBorder()),
-                        autofocus: false,
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term) {
-                          _fieldFocusChange(
-                              context, _quantityFocus, _bundlePieceFocus);
-                        },
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      TextFormField(
                         controller: bundlePieceController,
                         focusNode: _bundlePieceFocus,
                         // validator: (value) {
@@ -314,8 +268,8 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                         // },
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                            icon: const Icon(Icons.plus_one),
-                            labelText: 'Bundle / Piece',
+                            icon: const Icon(Icons.people_alt),
+                            labelText: 'Enter New Client/Site Details',
                             border: OutlineInputBorder()),
                         autofocus: false,
                         textInputAction: TextInputAction.next,
@@ -324,9 +278,44 @@ class _TransactionsHomeState extends State<TransactionsHome> {
                               context, _bundlePieceFocus, _rateFocus);
                         },
                       ),
+                      SizedBox(height: 10.0),
+                      new FormField(
+                        builder: (FormFieldState state) {
+                          return InputDecorator(
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.account_circle),
+                                labelText: 'Transaction Type',
+                                border: OutlineInputBorder(),
+                              ),
+                              child: new DropdownButtonHideUnderline(
+                                child: new DropdownButton(
+                                  hint: new Text("Select Transaction"),
+                                  // items: dataTransactionsTypeList.map((item) {
+                                  items:
+                                      dataTransactionsTypeHardList.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text(item),
+                                      value: item.toString(),
+                                    );
+                                  }).toList(),
+                                  autofocus: false,
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      clientNameController.text = newVal;
+                                      selectedTransactionType = newVal;
+                                      print('selectedTransactionTyoe:' +
+                                          selectedTransactionType);
+                                    });
+                                  },
+                                  value: selectedTransactionType,
+                                ),
+                              ));
+                        },
+                      ),
                       SizedBox(
                         height: 8.0,
                       ),
+                      // getTransactionRelatedWidget(clientNameController.text),
                       TextFormField(
                         controller: rateController,
                         focusNode: _rateFocus,
@@ -418,6 +407,32 @@ class _TransactionsHomeState extends State<TransactionsHome> {
         ),
       ),
     );
+  }
+
+  getTransactionRelatedWidget(String selectedTransactionType) {
+    if (selectedTransactionType == 'Credit') {
+      return TextFormField(
+        controller: quantityController,
+        focusNode: _quantityFocus,
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Enter Received Amount';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+            icon: const Icon(Icons.code),
+            labelText: 'Received Amount',
+            border: OutlineInputBorder()),
+        autofocus: false,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (term) {
+          _fieldFocusChange(context, _quantityFocus, _bundlePieceFocus);
+        },
+      );
+    } else
+      (SizedBox.shrink());
   }
 }
 
