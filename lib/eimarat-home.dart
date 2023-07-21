@@ -1,5 +1,6 @@
 import 'package:eimarat/screens/collections/fund-collections.dart';
 import 'package:eimarat/screens/expenses/expenses-entry-home.dart';
+import 'package:eimarat/screens/demo/demo-home.dart';
 import 'package:eimarat/screens/funds/all-funds.dart';
 import 'package:eimarat/screens/home/cons-home.dart';
 import 'package:eimarat/screens/sales/sales-entry-home.dart';
@@ -13,7 +14,7 @@ class EImaratHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
-        length: 5,
+        length: 6,
         child: new Scaffold(
           appBar: AppBar(
             title: Column(
@@ -44,6 +45,21 @@ class EImaratHome extends StatelessWidget {
                   child: new TabBar(
                     isScrollable: true,
                     tabs: [
+                      Tab(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.message),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(
+                                "Demo",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                      ),
                       Tab(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -114,6 +130,7 @@ class EImaratHome extends StatelessWidget {
           body: TabBarView(
             physics: BouncingScrollPhysics(),
             children: [
+              DemoHome(),
               TransactionsHome(),
               ConsHome(),
               SalesEntryHome(),
